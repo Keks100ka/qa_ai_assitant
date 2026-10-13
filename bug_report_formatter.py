@@ -24,7 +24,7 @@ def format_bug_report(raw_desription):
            {"role": "system", "content": SYSTEM_ROLE},
            {"role": "user", "content": prompt},       
        ],
-       temperature=0,
+       temperature=0
     )
 
     return response.choices[0].message.content
