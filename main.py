@@ -1,5 +1,7 @@
 import argparse
 from testcase_generator import generate_testcases
+from bug_report_formatter import format_bug_report
+
 
 def main():
     """Разбирает аргументы и вызывает нужный сервис."""
@@ -20,6 +22,13 @@ def main():
         help="Описание фичи"
     )
 
+    # Команда bug
+    bug_parser = subparsers.add_parser(
+        "bug",
+        help="Оформить баг-репорт по сырому описанию"
+    )
+    bug_parser.add_argument("description", help="Сырое описание бага")
+
     # Разбираем аргументы
     args = parser.parse_args()
 
@@ -28,6 +37,12 @@ def main():
         print("Генерирую тест-кейсы...\n")
         result = generate_testcases(args.description)
         print(result)
+
+    elif args.command == "bug":
+        print("Оформляю баг-репорт...\n")
+        result = format_bug_report(args.description)
+        print(result)
+
     else:
         parser.print_help()
 
