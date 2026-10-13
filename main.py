@@ -1,6 +1,7 @@
 import argparse
 from testcase_generator import generate_testcases
 from bug_report_formatter import format_bug_report
+from history import get_last_records
 
 
 def main():
@@ -29,19 +30,44 @@ def main():
     )
     bug_parser.add_argument("description", help="Сырое описание бага")
 
+    # Команда history
+    history_pasrer = subparsers.add_parser(
+        "history",
+        help="Вывести последние записи"
+    )
+    history_pasrer.add_argument(
+        "--N", 
+        type=int, 
+        default=10, 
+        help="Сколько последних записей показать (по умолчанию - 10)"
+    )
+
     # Разбираем аргументы
     args = parser.parse_args()
 
     # Выполняем нужную команду
-    if args.command == "testcase":
+    if args.command=="testcase":
         print("Генерирую тест-кейсы...\n")
         result = generate_testcases(args.description)
         print(result)
 
-    elif args.command == "bug":
+    elif args.command=="bug":
         print("Оформляю баг-репорт...\n")
         result = format_bug_report(args.description)
         print(result)
+
+    elif args.command=="history":
+        records = get_last_records(args.N)
+        if not records:
+            print("История пуста.")
+        else:
+            for i, record in enumerate(records, 1):
+                print(f"---Запись {i} ---")
+                print(f"Время: {record['timestamp']}")
+                print(f"Команда: {record['command']}")
+                print(f"Запрос: {record['input']}")
+                print(f"Ответ: {record['output'][200:]}...")
+                print()
 
     else:
         parser.print_help()

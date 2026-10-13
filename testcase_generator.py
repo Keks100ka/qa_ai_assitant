@@ -1,5 +1,6 @@
 from openai_client import client
 from config import MODEL, SYSTEM_ROLE
+from history import add_record
 
 
 def generate_testcases(feature_description):
@@ -7,7 +8,7 @@ def generate_testcases(feature_description):
     promt = (
         f"Опиши тест-кейс для следующей фичи:\n\n"
         f"{feature_description}\n\n"
-        f"Формат ответа\n\n"
+        f"Формат ответа (Не добавляй ID к тест-кейсам.)\n\n"
         f"1. <название тест-кейса> - <что проверяем>\n"
         f"2. <название тест-кейса> - <что проверяем>\n"
         f"...\n\n"
@@ -23,4 +24,8 @@ def generate_testcases(feature_description):
         temperature=0         
     )
 
-    return response.choices[0].message.content
+    answer = response.choices[0].message.content
+
+    add_record("testcase", feature_description, answer)
+
+    return answer

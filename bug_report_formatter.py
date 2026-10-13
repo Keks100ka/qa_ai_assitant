@@ -1,12 +1,13 @@
 from openai_client import client
 from config import MODEL, SYSTEM_ROLE
+from history import add_record
 
 
-def format_bug_report(raw_desription):
+def format_bug_report(raw_description):
 
     prompt = (
         f"Оформи следующий баг в структурированный баг-репорт:\n\n"
-        f"{raw_desription}\n\n"
+        f"{raw_description}\n\n"
         f"Формат ответа\n"
         f"**Заголовок:** <краткое описание проблемы>\n"
         f"**Шаги для воспроизведения:**\n"
@@ -18,6 +19,7 @@ def format_bug_report(raw_desription):
         f"**Окружение:** <если можно предположить>\n\n"
         #f"Дай ответ в формате JSON, без лишних пояснений."
     )
+    
     response = client.chat.completions.create(
        model= MODEL,
        messages=[
@@ -27,4 +29,8 @@ def format_bug_report(raw_desription):
        temperature=0
     )
 
-    return response.choices[0].message.content
+    answer = response.choices[0].message.content
+    
+    add_record("bug", raw_description, answer)
+    
+    return answer
