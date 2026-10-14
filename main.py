@@ -2,6 +2,7 @@ import argparse
 from testcase_generator import generate_testcases
 from bug_report_formatter import format_bug_report
 from history import get_last_records
+from translator import translate_to_english
 
 
 def main():
@@ -14,27 +15,21 @@ def main():
     subparsers = parser.add_subparsers(dest="command")
 
     # Команда testcase
-    testcase_parser = subparsers.add_parser(
-        "testcase",
-        help="Сгенерировать тест-кейсы по описанию фичи"
-    )
-    testcase_parser.add_argument(
-        "description",
-        help="Описание фичи"
-    )
+    testcase_parser = subparsers.add_parser("testcase", help="Сгенерировать тест-кейсы по описанию фичи")
+    testcase_parser.add_argument("description", help="Описание фичи")
 
     # Команда bug
-    bug_parser = subparsers.add_parser(
-        "bug",
-        help="Оформить баг-репорт по сырому описанию"
-    )
+    bug_parser = subparsers.add_parser("bug", help="Оформить баг-репорт по сырому описанию")
     bug_parser.add_argument("description", help="Сырое описание бага")
 
+    
+    # Команда translate
+    translate_parser = subparsers.add_parser("translate", help="Перевод текст на английский для QA")
+    translate_parser.add_argument("text", help="Введите текст на русском")
+
+
     # Команда history
-    history_pasrer = subparsers.add_parser(
-        "history",
-        help="Вывести последние записи"
-    )
+    history_pasrer = subparsers.add_parser("history", help="Вывести последние записи")
     history_pasrer.add_argument(
         "--N", 
         type=int, 
@@ -54,6 +49,11 @@ def main():
     elif args.command=="bug":
         print("Оформляю баг-репорт...\n")
         result = format_bug_report(args.description)
+        print(result)
+
+    elif args.command=="translate":
+        print("Перевожу на английский...\n")
+        result = translate_to_english(args.text)
         print(result)
 
     elif args.command=="history":
