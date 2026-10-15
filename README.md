@@ -55,7 +55,7 @@ AI-ассистент для QA-инженера. Помогает генери�
     python main.py history --limit 5
 
 ## Структура проекта
-'''
+```
 qa_ai_assistant/
 ├── main.py                    # точка входа, разбор аргументов
 ├── config.py                  # настройки (модель, роли, пути)
@@ -70,7 +70,7 @@ qa_ai_assistant/
 ├── .gitignore
 ├── requirements.txt
 └── README.md
-'''
+```
 
 ## Технологии
 
